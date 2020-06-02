@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AI_UnlockPlayerHeight", "AI_UnlockPlayerHeight\AI_UnlockPlayerHeight.csproj", "{B367E32B-4D7B-4ECC-8CE5-8E43D32A329F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HS2_UnlockPlayerHeight", "HS2_UnlockPlayerHeight\HS2_UnlockPlayerHeight.csproj", "{8732194C-67C9-4788-BEDF-A407F95B70EE}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B367E32B-4D7B-4ECC-8CE5-8E43D32A329F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B367E32B-4D7B-4ECC-8CE5-8E43D32A329F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B367E32B-4D7B-4ECC-8CE5-8E43D32A329F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B367E32B-4D7B-4ECC-8CE5-8E43D32A329F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8732194C-67C9-4788-BEDF-A407F95B70EE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8732194C-67C9-4788-BEDF-A407F95B70EE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8732194C-67C9-4788-BEDF-A407F95B70EE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8732194C-67C9-4788-BEDF-A407F95B70EE}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
