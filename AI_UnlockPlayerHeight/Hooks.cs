@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Reflection.Emit;
 using System.Reflection;
 using System.Linq;
@@ -83,6 +84,14 @@ namespace AI_UnlockPlayerHeight
                 return true;
 
             if (index != 0 || value != 0.75f || __instance.objHitBody != null)
+                return true;
+            
+            StackFrame frame = new StackFrame(2);
+            if (frame.GetMethod().Name != "MoveNext")
+                return true;
+            
+            frame = new StackFrame(3);
+            if (!frame.GetMethod().Name.Contains("ChangeAnimation"))
                 return true;
             
             __result = true;

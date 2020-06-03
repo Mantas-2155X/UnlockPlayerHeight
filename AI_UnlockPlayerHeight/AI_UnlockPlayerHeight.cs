@@ -14,7 +14,7 @@ namespace AI_UnlockPlayerHeight {
     [BepInPlugin(nameof(AI_UnlockPlayerHeight), nameof(AI_UnlockPlayerHeight), VERSION)]
     public class AI_UnlockPlayerHeight : BaseUnityPlugin
     {
-        public const string VERSION = "1.3.0";
+        public const string VERSION = "1.4.0";
         
         public new static ManualLogSource Logger;
 
@@ -57,10 +57,10 @@ namespace AI_UnlockPlayerHeight {
             lookAtPOVOffset = Config.Bind(new ConfigDefinition("Camera", "Camera POV y offset"), 0f, new ConfigDescription("Camera lookAtPOV y offset", new AcceptableValueRange<float>(-10f, 10f)));
 
             cardHeight = Config.Bind(new ConfigDefinition("Free Roam & Events", "Height from card"), true, new ConfigDescription("Set players height according to the value in the card"));
-            customHeight = Config.Bind(new ConfigDefinition("Free Roam & Events", "Custom height"), 75, new ConfigDescription("If 'Height from card' is off, use this value instead'", new AcceptableValueRange<int>(-100, 200)));
+            customHeight = Config.Bind(new ConfigDefinition("Free Roam & Events", "Custom height"), 75, new ConfigDescription("If 'Height from card' is off, use this value instead", new AcceptableValueRange<int>(-100, 200)));
 
             cardHeightDuringH = Config.Bind(new ConfigDefinition("H Scene", "Height from card (H)"), false, new ConfigDescription("Set players height according to the value in the card"));
-            customHeightDuringH = Config.Bind(new ConfigDefinition("H Scene", "Custom height (H)"), 75, new ConfigDescription("If 'Height from card' is off, use this value instead'", new AcceptableValueRange<int>(-100, 200)));
+            customHeightDuringH = Config.Bind(new ConfigDefinition("H Scene", "Custom height (H)"), 75, new ConfigDescription("If 'Height from card' is off, use this value instead", new AcceptableValueRange<int>(-100, 200)));
 
             HarmonyWrapper.PatchAll(typeof(CoreHooks));
 

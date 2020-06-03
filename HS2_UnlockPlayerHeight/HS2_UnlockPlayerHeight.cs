@@ -11,17 +11,21 @@ namespace HS2_UnlockPlayerHeight {
     [BepInPlugin(nameof(HS2_UnlockPlayerHeight), nameof(HS2_UnlockPlayerHeight), VERSION)]
     public class HS2_UnlockPlayerHeight : BaseUnityPlugin
     {
-        public const string VERSION = "1.3.0";
+        public const string VERSION = "1.4.0";
         
         public new static ManualLogSource Logger;
 
         private static ConfigEntry<bool> cardHeight { get; set; }
         private static ConfigEntry<int> customHeight { get; set; }
-
+        private static ConfigEntry<bool> cardHeight2nd { get; set; }
+        private static ConfigEntry<int> customHeight2nd { get; set; }
+        
         public static ChaControl chara;
+        public static ChaControl chara2nd;
         
         public static float cardHeightValue;
-
+        public static float cardHeightValue2nd;
+        
         private void Awake()
         {
             Logger = base.Logger;
@@ -29,25 +33,41 @@ namespace HS2_UnlockPlayerHeight {
             cardHeight = Config.Bind(new ConfigDefinition("H Scene", "Height from card"), true, new ConfigDescription("Set players height according to the value in the card"));
             customHeight = Config.Bind(new ConfigDefinition("H Scene", "Custom height"), 75, new ConfigDescription("If 'Height from card' is off, use this value instead'", new AcceptableValueRange<int>(-100, 200)));
 
+            cardHeight2nd = Config.Bind(new ConfigDefinition("H Scene", "Height from card 2nd"), true, new ConfigDescription("Set players height according to the value in the card for 2nd male"));
+            customHeight2nd = Config.Bind(new ConfigDefinition("H Scene", "Custom height 2nd"), 75, new ConfigDescription("If 'Height from card' is off, use this value instead for 2nd male", new AcceptableValueRange<int>(-100, 200)));
+            
             HarmonyWrapper.PatchAll(typeof(CoreHooks));
 
             if (Application.productName != "HoneySelect2") 
                 return;
             
-            cardHeight.SettingChanged += delegate { ApplySettings(); };
-            customHeight.SettingChanged += delegate { ApplySettings(); };
+            cardHeight.SettingChanged += delegate { ApplySettings(false); };
+            customHeight.SettingChanged += delegate { ApplySettings(false); };
 
+            cardHeight2nd.SettingChanged += delegate { ApplySettings(true); };
+            customHeight2nd.SettingChanged += delegate { ApplySettings(true); };
+            
             HarmonyWrapper.PatchAll(typeof(GameHooks));
         }
         
-        public static void ApplySettings()
+        public static void ApplySettings(bool is2nd)
         {
-            if (chara == null || !HSceneManager.isHScene)
+            if (!HSceneManager.isHScene)
                 return;
             
-            chara.SetShapeBodyValue(0, GetHeight());
+            if(!is2nd && chara != null)
+                chara.SetShapeBodyValue(0, GetHeight(false));
+            
+            if(is2nd && chara2nd != null)
+                chara2nd.SetShapeBodyValue(0, GetHeight(true));
         }
-        
-        private static float GetHeight() => cardHeight.Value ? cardHeightValue : customHeight.Value / 100f;
+
+        private static float GetHeight(bool is2nd)
+        {
+            if(is2nd)
+                return cardHeight2nd.Value ? cardHeightValue2nd : customHeight2nd.Value / 100f;
+            
+            return cardHeight.Value ? cardHeightValue : customHeight.Value / 100f;
+        }
     }
 }

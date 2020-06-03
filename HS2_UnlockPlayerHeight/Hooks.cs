@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Reflection.Emit;
 using System.Reflection;
 using System.Linq;
@@ -25,7 +26,7 @@ namespace HS2_UnlockPlayerHeight
                 return il;
             }
             
-            for(int i = min; i < max; i++)
+            for(var i = min; i < max; i++)
                 il[index + i].opcode = OpCodes.Nop;
 
             return il;
@@ -50,17 +51,23 @@ namespace HS2_UnlockPlayerHeight
         [HarmonyPostfix, HarmonyPatch(typeof(HScene), "SetStartAnimationInfo")]
         public static void HScene_SetStartAnimationInfo_HeightPostfix(HScene __instance)
         {
-            HS2_UnlockPlayerHeight.chara = Traverse.Create(__instance).Field("hSceneManager").Field("player").GetValue<ChaControl>();
+            var males = __instance.GetMales();
+
+            HS2_UnlockPlayerHeight.chara = males[0];
+            HS2_UnlockPlayerHeight.chara2nd = males[1];
             
-            HS2_UnlockPlayerHeight.ApplySettings();
+            HS2_UnlockPlayerHeight.ApplySettings(false);
+            HS2_UnlockPlayerHeight.ApplySettings(true);
         }
  
         // Save players height from card into cardHeightValue //
         [HarmonyPostfix, HarmonyPatch(typeof(ChaControl), "InitShapeBody")]
         public static void ChaControl_InitShapeBody_HeightPostfix(ChaControl __instance)
         {
-            if (__instance != null && __instance.isPlayer) 
+            if (__instance.isPlayer) 
                 HS2_UnlockPlayerHeight.cardHeightValue = __instance.chaFile.custom.body.shapeValueBody[0];
+            else if (__instance.sex == 0) 
+                HS2_UnlockPlayerHeight.cardHeightValue2nd = __instance.chaFile.custom.body.shapeValueBody[0];
         }
 
         // Ignore setting male height to 0.75f when changing H position //
@@ -71,6 +78,14 @@ namespace HS2_UnlockPlayerHeight
                 return true;
 
             if (index != 0 || value != 0.75f || __instance.objHitBody != null)
+                return true;
+            
+            var frame = new StackFrame(2);
+            if (frame.GetMethod().Name != "MoveNext")
+                return true;
+            
+            frame = new StackFrame(3);
+            if (!frame.GetMethod().Name.Contains("ChangeAnimation"))
                 return true;
             
             __result = true;
@@ -109,7 +124,7 @@ namespace HS2_UnlockPlayerHeight
                 return il;
             }
 
-            for (int i = -7; i < 2; i++)
+            for (var i = -7; i < 2; i++)
                 il[index + i].opcode = OpCodes.Nop;
             
             return il;
