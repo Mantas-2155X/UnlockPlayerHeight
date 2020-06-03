@@ -1,5 +1,5 @@
 # UnlockPlayerHeight  
-This plugin unlocks the players (or male chara) height hard lock of 75.  
+This plugin unlocks the players (or male chara) height hard lock of 75 and adds a male height slider to the maker.  
 
 # DO NOT REUPLOAD WITHOUT PERMISSION | 未经许可请勿转载  
 
