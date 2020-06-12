@@ -11,7 +11,7 @@ namespace HS2_UnlockPlayerHeight {
     [BepInPlugin(nameof(HS2_UnlockPlayerHeight), nameof(HS2_UnlockPlayerHeight), VERSION)]
     public class HS2_UnlockPlayerHeight : BaseUnityPlugin
     {
-        public const string VERSION = "1.4.0";
+        public const string VERSION = "1.4.1";
         
         public new static ManualLogSource Logger;
 
@@ -54,20 +54,21 @@ namespace HS2_UnlockPlayerHeight {
         {
             if (!HSceneManager.isHScene)
                 return;
-            
-            if(!is2nd && chara != null)
-                chara.SetShapeBodyValue(0, GetHeight(false));
-            
-            if(is2nd && chara2nd != null)
-                chara2nd.SetShapeBodyValue(0, GetHeight(true));
-        }
 
-        private static float GetHeight(bool is2nd)
-        {
-            if(is2nd)
-                return cardHeight2nd.Value ? cardHeightValue2nd : customHeight2nd.Value / 100f;
-            
-            return cardHeight.Value ? cardHeightValue : customHeight.Value / 100f;
+            if (is2nd)
+            {
+                if (chara2nd != null)
+                {
+                    chara2nd.SetShapeBodyValue(0, cardHeight2nd.Value ? cardHeightValue2nd : customHeight2nd.Value / 100f);
+                }
+            }
+            else
+            {
+                if (chara != null)
+                {
+                    chara.SetShapeBodyValue(0, cardHeight.Value ? cardHeightValue : customHeight.Value / 100f);
+                }
+            }
         }
     }
 }

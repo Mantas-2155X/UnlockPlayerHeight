@@ -117,25 +117,6 @@ namespace AI_UnlockPlayerHeight
             set.gameObject.SetActive(true);
         }
 
-        //--Hard height lock of 75 for the player removal--//
-        private static IEnumerable<CodeInstruction> HScene_ChangeAnimation_RemoveHeightLock(IEnumerable<CodeInstruction> instructions)
-        {
-            var il = instructions.ToList();
-            
-            var index = il.FindIndex(instruction => instruction.opcode == OpCodes.Callvirt && (instruction.operand as MethodInfo)?.Name == "SetShapeBodyValue");
-            if (index <= 0)
-            {
-                AI_UnlockPlayerHeight.Logger.LogMessage("Failed transpiling 'HScene_ChangeAnimation_RemoveHeightLock' SetShapeBodyValue index not found!");
-                AI_UnlockPlayerHeight.Logger.LogWarning("Failed transpiling 'HScene_ChangeAnimation_RemoveHeightLock' SetShapeBodyValue index not found!");
-                return il;
-            }
-
-            for (int i = -8; i < 2; i++)
-                il[index + i].opcode = OpCodes.Nop;
-            
-            return il;
-        }
-        
         [HarmonyTranspiler, HarmonyPatch(typeof(Les), "setAnimationParamater")]
         public static IEnumerable<CodeInstruction> Les_setAnimationParamater_RemoveHeightLock(IEnumerable<CodeInstruction> instructions)
         {
