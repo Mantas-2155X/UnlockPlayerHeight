@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 
 using BepInEx;
-using BepInEx.Harmony;
 using BepInEx.Logging;
 using BepInEx.Configuration;
 
@@ -62,7 +61,9 @@ namespace AI_UnlockPlayerHeight {
             cardHeightDuringH = Config.Bind(new ConfigDefinition("H Scene", "Height from card (H)"), false, new ConfigDescription("Set players height according to the value in the card"));
             customHeightDuringH = Config.Bind(new ConfigDefinition("H Scene", "Custom height (H)"), 75, new ConfigDescription("If 'Height from card' is off, use this value instead", new AcceptableValueRange<int>(-100, 200)));
 
-            HarmonyWrapper.PatchAll(typeof(CoreHooks));
+            var harmony = new HarmonyLib.Harmony("HS2_UnlockPlayerHeight");
+            
+            harmony.PatchAll(typeof(CoreHooks));
 
             if (Application.productName != "AI-Syoujyo" && Application.productName != "AI-Shoujo") 
                 return;
@@ -76,7 +77,7 @@ namespace AI_UnlockPlayerHeight {
             cardHeightDuringH.SettingChanged += delegate { ApplySettings(actor); };
             customHeightDuringH.SettingChanged += delegate { ApplySettings(actor); };
                 
-            HarmonyWrapper.PatchAll(typeof(GameHooks));
+            harmony.PatchAll(typeof(GameHooks));
         }
 
         private static float GetHeight()
@@ -94,14 +95,14 @@ namespace AI_UnlockPlayerHeight {
 
             actor = __instance;
             
-            ChaControl chaControl = actor.ChaControl;
+            var chaControl = actor.ChaControl;
             if (chaControl == null) 
                 return;
 
-            float height = GetHeight();
+            var height = GetHeight();
             chaControl.SetShapeBodyValue(0, height);
             
-            PlayerController controller = actor.PlayerController;
+            var controller = actor.PlayerController;
             if (controller == null) 
                 return;
 
@@ -117,11 +118,11 @@ namespace AI_UnlockPlayerHeight {
             var newEyePos = Vector3.Lerp(eyeObjs[0].eyeTransform.position, eyeObjs[1].eyeTransform.position, 0.5f);
             var newHeadPos = chaControl.objHead.transform.position;
             
-            for (int i = 0; i < controller.transform.childCount; i++)
+            for (var i = 0; i < controller.transform.childCount; i++)
             {
-                Transform child = controller.transform.GetChild(i);
-                Vector3 position = child.position;
-                Vector3 localPosition = child.localPosition;
+                var child = controller.transform.GetChild(i);
+                var position = child.position;
+                var localPosition = child.localPosition;
 
                 if (!alignCamera.Value)
                 {
@@ -143,7 +144,7 @@ namespace AI_UnlockPlayerHeight {
                 
                 if (child.name.Contains("Lookat"))
                 {
-                    float offset = lookAtOffset.Value;
+                    var offset = lookAtOffset.Value;
 
                     if (child.name.Contains("POV"))
                         offset = lookAtPOVOffset.Value;

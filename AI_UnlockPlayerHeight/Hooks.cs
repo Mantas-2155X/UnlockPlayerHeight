@@ -27,7 +27,7 @@ namespace AI_UnlockPlayerHeight
                 return il;
             }
             
-            for(int i = min; i < max; i++)
+            for(var i = min; i < max; i++)
                 il[index + i].opcode = OpCodes.Nop;
 
             return il;
@@ -86,7 +86,7 @@ namespace AI_UnlockPlayerHeight
             if (index != 0 || value != 0.75f || __instance.objHitBody != null)
                 return true;
             
-            StackFrame frame = new StackFrame(2);
+            var frame = new StackFrame(2);
             if (frame.GetMethod().Name != "MoveNext")
                 return true;
             
@@ -130,7 +130,7 @@ namespace AI_UnlockPlayerHeight
                 return il;
             }
 
-            for (int i = -4; i < 2; i++)
+            for (var i = -4; i < 2; i++)
                 il[index + i].opcode = OpCodes.Nop;
 
             index = il.FindIndex(instruction => instruction.opcode == OpCodes.Callvirt && (instruction.operand as MethodInfo)?.Name == "get_isPlayer");
@@ -141,7 +141,7 @@ namespace AI_UnlockPlayerHeight
                 return il;
             }
             
-            for (int i = -4; i < 2; i++)
+            for (var i = -4; i < 2; i++)
                 il[index + i].opcode = OpCodes.Nop;
 
             return il;
