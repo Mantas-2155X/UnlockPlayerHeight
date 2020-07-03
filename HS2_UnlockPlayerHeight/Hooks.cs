@@ -1,6 +1,6 @@
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Reflection.Emit;
+using System.Diagnostics;
 using System.Linq;
 
 using HarmonyLib;
@@ -65,21 +65,42 @@ namespace HS2_UnlockPlayerHeight
             if (manager.pngMale != null)
             {
                 var card = new ChaFileControl();
+
+                var png = manager.pngMale;
+                if (png == "")
+                {
+                    png = HS2_UnlockPlayerHeight.chara.chaFile.charaFileName;
+                    
+                    if (png == "")
+                        png = "HS2_ill_M_000";
+                }
                 
-                if (card.LoadCharaFile(manager.pngMale) || card.LoadCharaFile(manager.pngMale, 1))
+                if (manager.bFutanari && card.LoadCharaFile(png, 1, true) || card.LoadCharaFile(png, 255, true))
+                {
                     HS2_UnlockPlayerHeight.cardHeightValue = card.custom.body.shapeValueBody[0];
+                    HS2_UnlockPlayerHeight.ApplySettings(false);
+                }
             }
             
             if (manager.pngMaleSecond != null)
             {
                 var card = new ChaFileControl();
                 
-                if (card.LoadCharaFile(manager.pngMaleSecond) || card.LoadCharaFile(manager.pngMaleSecond, 1))
+                var png = manager.pngMaleSecond;
+                if (png == "")
+                {
+                    png = HS2_UnlockPlayerHeight.chara2nd.chaFile.charaFileName;
+                    
+                    if (png == "")
+                        png = "HS2_ill_M_000";
+                }
+                
+                if (manager.bFutanariSecond && card.LoadCharaFile(png, 1, true) || card.LoadCharaFile(png, 255, true))
+                {
                     HS2_UnlockPlayerHeight.cardHeightValue2nd = card.custom.body.shapeValueBody[0];
+                    HS2_UnlockPlayerHeight.ApplySettings(true);
+                }
             }
-
-            HS2_UnlockPlayerHeight.ApplySettings(false);
-            HS2_UnlockPlayerHeight.ApplySettings(true);
         }
 
         // Ignore setting male height to 0.75f when changing H position //
@@ -100,7 +121,8 @@ namespace HS2_UnlockPlayerHeight
                 return true;
             
             frame = new StackFrame(3);
-            if (!frame.GetMethod().Name.Contains("ChangeAnimation"))
+            var name = frame.GetMethod().Name;
+            if (!name.Contains("ChangeAnimation") && !name.Contains("Start"))
                 return true;
             
             __result = true;
