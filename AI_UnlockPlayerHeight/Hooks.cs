@@ -51,20 +51,16 @@ namespace AI_UnlockPlayerHeight
         // Apply height, camera settings for free roam & events //
         [HarmonyPostfix, HarmonyPatch(typeof(PlayerActor), "InitializeIK")]
         public static void PlayerActor_InitializeIK_HeightPostfix(PlayerActor __instance) => AI_UnlockPlayerHeight.ApplySettings(__instance);
-
-        // Apply duringH height settings when starting H //
-        [HarmonyPostfix, HarmonyPatch(typeof(HScene), "InitCoroutine")]
-        public static void HScene_InitCoroutine_HeightPostfix(HScene __instance)
-        {
-            if (__instance != null && AI_UnlockPlayerHeight.actor != null)
-                AI_UnlockPlayerHeight.ApplySettings(AI_UnlockPlayerHeight.actor);
-        }
         
         // Apply roam height settings when ending H //
         [HarmonyPostfix, HarmonyPatch(typeof(HScene), "OnDisable")]
-        public static void HScene_OnDisable_HeightPostfix(HScene __instance)
+        public static void HScene_OnDisable_HeightPostfix() => AI_UnlockPlayerHeight.ApplySettings(AI_UnlockPlayerHeight.actor);
+        
+        // Read card height and apply starting H //
+        [HarmonyPostfix, HarmonyPatch(typeof(HScene), "SetStartVoice")]
+        public static void HScene_SetStartVoice_HeightPostfix()
         {
-            if (__instance != null && AI_UnlockPlayerHeight.actor != null)
+            if (AI_UnlockPlayerHeight.actor != null)
                 AI_UnlockPlayerHeight.ApplySettings(AI_UnlockPlayerHeight.actor);
         }
         
@@ -75,7 +71,7 @@ namespace AI_UnlockPlayerHeight
             if (__instance != null && __instance.isPlayer) 
                 AI_UnlockPlayerHeight.cardHeightValue = __instance.chaFile.custom.body.shapeValueBody[0];
         }
-
+        
         // Ignore setting male height to 0.75f when changing H position //
         [HarmonyPrefix, HarmonyPatch(typeof(ChaControl), "SetShapeBodyValue")]
         public static bool ChaControl_SetShapeBodyValue_HeightPrefix(ChaControl __instance, ref bool __result, int index, float value)

@@ -4,13 +4,15 @@ using BepInEx.Configuration;
 
 using AIChara;
 using Manager;
+
 using UnityEngine;
 
-namespace HS2_UnlockPlayerHeight {
+namespace HS2_UnlockPlayerHeight 
+{
     [BepInPlugin(nameof(HS2_UnlockPlayerHeight), nameof(HS2_UnlockPlayerHeight), VERSION)]
     public class HS2_UnlockPlayerHeight : BaseUnityPlugin
     {
-        public const string VERSION = "1.4.2";
+        public const string VERSION = "1.4.3";
         
         public new static ManualLogSource Logger;
 
@@ -56,16 +58,10 @@ namespace HS2_UnlockPlayerHeight {
             if (!HSceneManager.isHScene)
                 return;
 
-            if (is2nd)
-            {
-                if (chara2nd != null)
-                    chara2nd.SetShapeBodyValue(0, cardHeight2nd.Value ? cardHeightValue2nd : customHeight2nd.Value / 100f);
-            }
-            else
-            {
-                if (chara != null)
-                    chara.SetShapeBodyValue(0, cardHeight.Value ? cardHeightValue : customHeight.Value / 100f);
-            }
+            if (is2nd && chara2nd != null)
+                chara2nd.SetShapeBodyValue(0, cardHeight2nd.Value ? cardHeightValue2nd : customHeight2nd.Value / 100f);
+            else if (!is2nd && chara != null)
+                chara.SetShapeBodyValue(0, cardHeight.Value ? cardHeightValue : customHeight.Value / 100f);
         }
     }
 }

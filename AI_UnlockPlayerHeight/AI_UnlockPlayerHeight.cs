@@ -9,11 +9,12 @@ using AIProject;
 using Manager;
 using UnityEngine;
 
-namespace AI_UnlockPlayerHeight {
+namespace AI_UnlockPlayerHeight 
+{
     [BepInPlugin(nameof(AI_UnlockPlayerHeight), nameof(AI_UnlockPlayerHeight), VERSION)]
     public class AI_UnlockPlayerHeight : BaseUnityPlugin
     {
-        public const string VERSION = "1.4.2";
+        public const string VERSION = "1.4.3";
         
         public new static ManualLogSource Logger;
 
@@ -29,8 +30,8 @@ namespace AI_UnlockPlayerHeight {
 
         public static PlayerActor actor;
 
-        public static bool inH;
         public static float cardHeightValue;
+        
         private static readonly float[] defaultY =
         {
             0f, 
@@ -90,11 +91,10 @@ namespace AI_UnlockPlayerHeight {
         
         public static void ApplySettings(PlayerActor __instance)
         {
-            if (__instance == null) 
+            actor = __instance;
+            if (actor == null) 
                 return;
 
-            actor = __instance;
-            
             var chaControl = actor.ChaControl;
             if (chaControl == null) 
                 return;
@@ -109,6 +109,7 @@ namespace AI_UnlockPlayerHeight {
             instance.StartCoroutine(ApplySettings_Coroutine(controller, chaControl));
         }
 
+        // Need to recode this someday to something more efficient and not "hardcoded". head transform, eyes transform for pov
         private static IEnumerator ApplySettings_Coroutine(PlayerController controller, ChaControl chaControl)
         {
             yield return null;

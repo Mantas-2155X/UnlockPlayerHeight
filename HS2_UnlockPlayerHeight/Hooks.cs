@@ -51,9 +51,9 @@ namespace HS2_UnlockPlayerHeight
         
         // Apply duringH height settings when starting H //
         [HarmonyPostfix, HarmonyPatch(typeof(HScene), "SetStartAnimationInfo")]
-        public static void HScene_SetStartAnimationInfo_HeightPostfix(HScene __instance)
+        public static void HScene_SetStartAnimationInfo_HeightPostfix(HScene __instance, HSceneManager ___hSceneManager)
         {
-            manager = Traverse.Create(__instance).Field("hSceneManager").GetValue<HSceneManager>();
+            manager = ___hSceneManager;
             males = __instance.GetMales();
             
             HS2_UnlockPlayerHeight.chara = males[0];
@@ -62,40 +62,38 @@ namespace HS2_UnlockPlayerHeight
             HS2_UnlockPlayerHeight.cardHeightValue = 0.75f;
             HS2_UnlockPlayerHeight.cardHeightValue2nd = 0.75f;
             
-            if (manager.pngMale != null)
+            var png1 = manager.pngMale;
+            if (HS2_UnlockPlayerHeight.chara != null && png1 != null)
             {
-                var card = new ChaFileControl();
-
-                var png = manager.pngMale;
-                if (png == "")
+                if (png1 == "")
                 {
-                    png = HS2_UnlockPlayerHeight.chara.chaFile.charaFileName;
+                    png1 = HS2_UnlockPlayerHeight.chara.chaFile.charaFileName;
                     
-                    if (png == "")
-                        png = "HS2_ill_M_000";
+                    if (png1 == "")
+                        png1 = "HS2_ill_M_000";
                 }
-                
-                if (manager.bFutanari && card.LoadCharaFile(png, 1, true) || card.LoadCharaFile(png, 255, true))
+             
+                var card = new ChaFileControl();
+                if (manager.bFutanari && card.LoadCharaFile(png1, 1, true) || card.LoadCharaFile(png1, 255, true))
                 {
                     HS2_UnlockPlayerHeight.cardHeightValue = card.custom.body.shapeValueBody[0];
                     HS2_UnlockPlayerHeight.ApplySettings(false);
                 }
             }
             
-            if (manager.pngMaleSecond != null)
+            var png2 = manager.pngMaleSecond;
+            if (HS2_UnlockPlayerHeight.chara2nd != null && png2 != null)
             {
-                var card = new ChaFileControl();
-                
-                var png = manager.pngMaleSecond;
-                if (png == "")
+                if (png2 == "")
                 {
-                    png = HS2_UnlockPlayerHeight.chara2nd.chaFile.charaFileName;
+                    png2 = HS2_UnlockPlayerHeight.chara2nd.chaFile.charaFileName;
                     
-                    if (png == "")
-                        png = "HS2_ill_M_000";
+                    if (png2 == "")
+                        png2 = "HS2_ill_M_000";
                 }
                 
-                if (manager.bFutanariSecond && card.LoadCharaFile(png, 1, true) || card.LoadCharaFile(png, 255, true))
+                var card = new ChaFileControl();
+                if (manager.bFutanariSecond && card.LoadCharaFile(png2, 1, true) || card.LoadCharaFile(png2, 255, true))
                 {
                     HS2_UnlockPlayerHeight.cardHeightValue2nd = card.custom.body.shapeValueBody[0];
                     HS2_UnlockPlayerHeight.ApplySettings(true);
