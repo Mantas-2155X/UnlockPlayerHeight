@@ -97,12 +97,12 @@ namespace AI_UnlockPlayerHeight
 
         // Enable male height slider in charamaker //
         [HarmonyPostfix, HarmonyPatch(typeof(CustomControl), "Initialize")]
-        public static void CustomControl_Initialize_HeightPrefix(CustomControl __instance, byte _sex)
+        public static void CustomControl_Initialize_HeightPrefix(CustomControl __instance, byte _sex, UnityEngine.GameObject ___objSubCanvas)
         {
             if (_sex != 0)
                 return;
 
-            var comp = __instance.GetComponentInChildren<CvsB_ShapeWhole>();
+            var comp = ___objSubCanvas?.transform.Find("SettingWindow/WinBody").GetComponentInChildren<CvsB_ShapeWhole>();
             if (comp == null)
                 return;
 
