@@ -14,7 +14,7 @@ namespace AI_UnlockPlayerHeight
     [BepInPlugin(nameof(AI_UnlockPlayerHeight), nameof(AI_UnlockPlayerHeight), VERSION)]
     public class AI_UnlockPlayerHeight : BaseUnityPlugin
     {
-        public const string VERSION = "1.4.3";
+        public const string VERSION = "1.4.4";
         
         public new static ManualLogSource Logger;
 
